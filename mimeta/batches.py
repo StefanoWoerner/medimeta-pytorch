@@ -1,6 +1,6 @@
 from typing import Optional, Callable
 
-from torchcross.data.base import RandomChainTaskSource, BatchedTaskSource
+from torchcross.data import RandomChainTaskSource, BatchedTaskSource
 from .logger import logger
 from .mimeta import MIMeta
 

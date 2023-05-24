@@ -2,7 +2,7 @@ import os
 import pickle as pkl
 from typing import Optional, Callable
 
-from torchcross.data.meta import MetaDataset
+from torchcross.data.metadataset import MetaDataset
 from torchcross.data.task import Task
 from torchcross.utils.collate_fn import identity
 from .logger import logger

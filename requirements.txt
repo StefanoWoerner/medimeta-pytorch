@@ -4,3 +4,4 @@ torch~=2.0.0
 PyYAML~=6.0
 Pillow~=9.5.0
 torchvision~=0.15.1
+tqdm~=4.65.0

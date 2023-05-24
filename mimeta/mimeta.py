@@ -7,8 +7,8 @@ import yaml
 from PIL import Image
 from torchvision import transforms
 
-from torchcross.data.base import TaskSource
-from torchcross.data.task import TaskTarget
+from torchcross.data import TaskSource
+from torchcross.data import TaskTarget
 from .logger import logger
 
 
@@ -24,6 +24,7 @@ def default_transform(input_size):
 
 class MIMeta(TaskSource):
     _data_path: str = None
+    _infos: dict[str, dict] = None
     _dataset_dir_mapping: dict[str, str] = None
     _available_tasks: dict[str, list[str]] = None
 
@@ -59,16 +60,16 @@ class MIMeta(TaskSource):
         info_file = os.path.join(data_path, dataset_subdir, "info.yaml")
         with open(info_file, "r") as f:
             info = yaml.load(f, Loader=yaml.FullLoader)
-            task_info = next(
-                (t for t in info["tasks"] if t["task_name"] == task_name), None
+        task_info = next(
+            (t for t in info["tasks"] if t["task_name"] == task_name), None
+        )
+        if task_info is None:
+            raise ValueError(
+                f"No task with name '{task_name}' found for dataset '{dataset_name}'"
             )
-            if task_info is None:
-                raise ValueError(
-                    f"No task with name '{task_name}' found for dataset '{dataset_name}'"
-                )
-            self.classes = task_info["labels"]
-            self.task_target = TaskTarget[task_info["task_target"]]
-            self.input_size = info["input_size"]
+        self.classes = task_info["labels"]
+        self.task_target = TaskTarget[task_info["task_target"]]
+        self.input_size = info["input_size"]
 
         # set number of channels based on input size
         self.num_channels = self.input_size[0]
@@ -96,7 +97,9 @@ class MIMeta(TaskSource):
                 data_path, dataset_subdir, "original_splits", f"{original_split}.txt"
             )
             if not os.path.exists(split_file):
-                available_splits = [k for k, v in info["num_samples"].items() if v > 0]
+                available_splits = [
+                    k for k, v in info["original_splits_num_samples"].items() if v > 0
+                ]
                 raise ValueError(
                     f"Split '{original_split}' not found for dataset {dataset_name}. "
                     f"Available splits: {available_splits}"
@@ -146,9 +149,21 @@ class MIMeta(TaskSource):
         return cls._available_tasks
 
     @classmethod
+    def get_info_dict(cls, data_path: str, dataset_name: str) -> dict:
+        if cls._dataset_dir_mapping is None or cls._data_path != data_path:
+            cls._read_dataset_info(data_path)
+        if dataset_name not in cls._infos:
+            raise ValueError(
+                f"Dataset '{dataset_name}' not found. "
+                f"Available datasets: {list(cls._infos.keys())}"
+            )
+        return cls._infos[dataset_name]
+
+    @classmethod
     def _read_dataset_info(cls, data_path: str):
         cls._dataset_dir_mapping = {}
         cls._available_tasks = {}
+        cls._infos = {}
         for subdir in os.listdir(data_path):
             subdir_path = os.path.join(data_path, subdir)
             if not os.path.isdir(subdir_path):
@@ -158,6 +173,7 @@ class MIMeta(TaskSource):
                 continue
             with open(info_path, "r") as f:
                 info = yaml.load(f, Loader=yaml.FullLoader)
+                cls._infos[info["name"]] = info
                 cls._dataset_dir_mapping[info["name"]] = subdir
                 cls._available_tasks[info["name"]] = [
                     t["task_name"] for t in info["tasks"]

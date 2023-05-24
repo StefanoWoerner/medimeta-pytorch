@@ -1,10 +1,9 @@
 import os
 import pickle as pkl
 
-from torchcross.data.meta import FewShotMetaDataset, SubTaskRandomFewShotMetaDataset
-from mimeta.mimeta import MIMeta
+from mimeta import MIMeta
+from torchcross.data.metadataset import FewShotMetaDataset, SubTaskRandomFewShotMetaDataset
 from torchcross.data.task import Task
-
 
 overwrite = False
 
@@ -70,8 +69,8 @@ def create_random_few_shot_tasks(
 
 
 def save_few_shot_tasks(data_path, save_path=None):
-    n_query = 20
-    length = 400
+    n_query = 10
+    length = 100
     os.makedirs(save_path, exist_ok=True)
     # create few-shot instances for all tasks and all nshot values
     # and save them to pkl files
@@ -93,7 +92,7 @@ def save_few_shot_tasks(data_path, save_path=None):
 
 def save_random_few_shot_tasks(data_path, save_path=None):
     n_query = 10
-    length = 20000
+    length = 1000
     n_support_min = 1
     n_support_max = 10
     os.makedirs(save_path, exist_ok=True)
@@ -126,7 +125,7 @@ def main():
 
     print("Available tasks:")
     print(available_tasks(data_path))
-    save_few_shot_tasks(data_path, save_path)
+    #save_few_shot_tasks(data_path, save_path)
     save_random_few_shot_tasks(data_path, save_path)
 
 
