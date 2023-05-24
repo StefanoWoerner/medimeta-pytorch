@@ -77,7 +77,7 @@ of multiple MIMeta tasks.
 
 See the [examples](examples) directory for examples on how to use MIMeta in conjunction
 with TorchCross.
-- [`imagenet_pretrained.py`](examples/imagenet_pretraining.py) shows how you can test
+- [`imagenet_pretrained.py`](examples/imagenet_pretrained.py) shows how you can test
   pre-trained models on a few-shot instance of a MIMeta task.
 - [`cross_domain_pretraining.py`](examples/cross_domain_pretraining.py) shows how you
   can perform cross-domain pre-training on different MIMeta tasks and then test the
