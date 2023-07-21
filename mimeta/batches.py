@@ -1,11 +1,11 @@
 from typing import Optional, Callable
 
-from torchcross.data import RandomChainTaskSource, BatchedTaskSource
+from torchcross.data import RandomInterleaveDataset, BatchedTaskSource
 from .logger import logger
 from .mimeta import MIMeta
 
 
-class MultiMIMetaBatchTaskSource(RandomChainTaskSource):
+class MultiMIMetaBatchTaskSource(RandomInterleaveDataset):
     def __init__(
         self,
         mimeta_data_path: str,
@@ -46,6 +46,7 @@ class MultiMIMetaBatchTaskSource(RandomChainTaskSource):
                 shuffle=shuffle,
                 drop_last=drop_last,
                 collate_fn=collate_fn,
+                with_task_description=True,
             )
             for task_source in unbatched_task_sources
         ]

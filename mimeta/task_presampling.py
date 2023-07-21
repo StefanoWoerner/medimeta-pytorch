@@ -125,7 +125,7 @@ def main():
 
     print("Available tasks:")
     print(available_tasks(data_path))
-    #save_few_shot_tasks(data_path, save_path)
+    save_few_shot_tasks(data_path, save_path)
     save_random_few_shot_tasks(data_path, save_path)
 
 
