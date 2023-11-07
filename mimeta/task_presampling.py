@@ -2,7 +2,10 @@ import os
 import pickle as pkl
 
 from mimeta import MIMeta
-from torchcross.data.metadataset import FewShotMetaDataset, SubTaskRandomFewShotMetaDataset
+from torchcross.data.metadataset import (
+    FewShotMetaDataset,
+    SubTaskRandomFewShotMetaDataset,
+)
 from torchcross.data.task import Task
 
 overwrite = False
@@ -118,7 +121,7 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--data_path", type=str, default="data/MIMeta")
-    parser.add_argument("--save_path", type=str, default="data/MIMeta_presampled")
+    parser.add_argument("--save_path", type=str, default="data/MIMeta_presampled2")
     args = parser.parse_args()
     data_path = args.data_path
     save_path = args.save_path

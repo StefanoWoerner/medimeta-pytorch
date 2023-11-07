@@ -10,7 +10,8 @@ from torch.utils.data import DataLoader
 import torchcross as tx
 from mimeta import (
     get_available_tasks,
-    MultiPickledMIMetaTaskDataset, PickledMIMetaTaskDataset,
+    MultiPickledMIMetaTaskDataset,
+    PickledMIMetaTaskDataset,
 )
 from torchcross.models.lightning import CrossDomainMAML
 from torchcross.utils.collate_fn import identity
@@ -33,7 +34,7 @@ def main(args):
     validation_task_name = args.validation_task
     num_workers = args.num_workers
 
-    batch_size = 64
+    batch_size = 2
 
     task_dict = get_available_tasks(data_path)
     train_tasks = [
@@ -59,21 +60,21 @@ def main(args):
         validation_dataset_name,
         validation_task_name,
         n_support=5,
-        n_query=20,
-        length=400,
+        n_query=10,
+        length=100,
         collate_fn=tx.utils.collate_fn.stack,
     )
 
     train_dataloader = DataLoader(
         train_dataset,
-        batch_size=2,
+        batch_size=batch_size,
         num_workers=num_workers,
         collate_fn=identity,
         pin_memory=True,
     )
     val_dataloader = DataLoader(
         val_dataset,
-        batch_size=2,
+        batch_size=batch_size,
         num_workers=num_workers,
         collate_fn=identity,
         pin_memory=True,
@@ -87,14 +88,14 @@ def main(args):
     eval_num_inner_steps = 32
 
     # Create the lighting model with pre-trained resnet18 backbone
-    model = CrossDomainMAML(resnet18_backbone(pretrained=True),
-                            outer_optimizer,
-                            inner_optimizer,
-                            eval_inner_optimizer,
-                            num_inner_steps,
-                            eval_num_inner_steps)
-
-
+    model = CrossDomainMAML(
+        resnet18_backbone(pretrained=True),
+        outer_optimizer,
+        inner_optimizer,
+        eval_inner_optimizer,
+        num_inner_steps,
+        eval_num_inner_steps,
+    )
 
     # Create the lightning trainer
     trainer = pl.Trainer(
@@ -119,13 +120,13 @@ def main(args):
         target_dataset_name,
         target_task_name,
         n_support=5,
-        n_query=20,
-        length=400,
+        n_query=10,
+        length=100,
         collate_fn=tx.utils.collate_fn.stack,
     )
     test_dataloader = DataLoader(
         test_dataset,
-        batch_size=2,
+        batch_size=batch_size,
         num_workers=num_workers,
         collate_fn=identity,
         pin_memory=True,
@@ -141,13 +142,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--data_path", type=str, default="data/MIMeta")
     parser.add_argument(
-        "--presampled_data_path", type=str, default="data/MIMeta_presampled"
+        "--presampled_data_path", type=str, default="data/MIMeta_presampled2"
     )
     parser.add_argument("--target_dataset", type=str, default="OCT")
     parser.add_argument("--target_task", type=str, default="disease")
     parser.add_argument("--validation_dataset", type=str, default="OCT")
     parser.add_argument("--validation_task", type=str, default="disease")
     parser.add_argument("--num_workers", type=int, default=8)
-    args = parser.parse_args()
 
-    main(args)
+    main(parser.parse_args())

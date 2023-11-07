@@ -7,7 +7,7 @@ import yaml
 from PIL import Image
 from torchvision import transforms
 
-from torchcross.data import TaskSource
+from torchcross.data import TaskSource, TaskDescription
 from torchcross.data import TaskTarget
 from .logger import logger
 
@@ -67,9 +67,14 @@ class MIMeta(TaskSource):
             raise ValueError(
                 f"No task with name '{task_name}' found for dataset '{dataset_name}'"
             )
-        self.classes = task_info["labels"]
         self.task_target = TaskTarget[task_info["task_target"]]
+        self.classes = task_info["labels"]
+        self.task_identifier = f"{dataset_name}: {task_name}"
+        self.domain_identifier = ""  # task_info["domain"]
         self.input_size = info["input_size"]
+        self.task_description = TaskDescription(
+            self.task_target, self.classes, self.task_identifier, self.domain_identifier
+        )
 
         # set number of channels based on input size
         self.num_channels = self.input_size[0]
@@ -110,8 +115,6 @@ class MIMeta(TaskSource):
                 int(p.split("/")[-1].split(".")[0]) for p in split_paths
             ]
             self.labels = self.labels[self.split_indices]
-
-        self.task_identifier = f"{dataset_name}: {task_name}"
 
     def __getitem__(self, index):
         img_index = index if self.original_split is None else self.split_indices[index]

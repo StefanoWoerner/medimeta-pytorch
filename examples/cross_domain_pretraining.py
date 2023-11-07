@@ -166,6 +166,5 @@ if __name__ == "__main__":
     parser.add_argument("--target_dataset", type=str, default="OCT")
     parser.add_argument("--target_task", type=str, default="disease")
     parser.add_argument("--num_workers", type=int, default=8)
-    args = parser.parse_args()
 
-    main(args)
+    main(parser.parse_args())

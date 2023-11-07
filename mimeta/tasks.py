@@ -3,7 +3,7 @@ import pickle as pkl
 from typing import Optional, Callable
 
 from torchcross.data.metadataset import MetaDataset
-from torchcross.data.task import Task
+from torchcross.data.task import Task, TaskDescription
 from torchcross.utils.collate_fn import identity
 from .logger import logger
 from .mimeta import MIMeta
@@ -51,7 +51,7 @@ class PickledMIMetaTaskDataset(MetaDataset):
         query = [(self.task_source[i][0], l) for i, l in task.query]
         support = self.collate_fn(support)
         query = self.collate_fn(query)
-        return Task(support, query, task.task_target, task.classes)
+        return Task(support, query, task.description)
 
     def __len__(self) -> int:
         return len(self.task_list)
@@ -106,7 +106,7 @@ class MultiPickledMIMetaTaskDataset(MetaDataset):
         query = [(task_source[i][0], l) for i, l in task.query]
         support = self.collate_fn(support)
         query = self.collate_fn(query)
-        return Task(support, query, task.task_target, task.classes)
+        return Task(support, query, task.description)
 
     def __len__(self) -> int:
         return len(self.task_list)
