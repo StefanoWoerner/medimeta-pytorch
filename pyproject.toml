@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "mimeta-pytorch"
-version = "0.0.4"
+version = "0.0.5"
 authors = [
     { name="Stefano Woerner", email="stefano@woerner.eu" },
 ]
@@ -30,7 +30,7 @@ dependencies = [
     "PyYAML~=6.0",
     "Pillow~=9.5.0",
     "torchvision~=0.15.1",
-    "torchcross~=0.0.4",
+    "torchcross~=0.0.5",
 ]
 
 [project.urls]

@@ -121,7 +121,7 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--data_path", type=str, default="data/MIMeta")
-    parser.add_argument("--save_path", type=str, default="data/MIMeta_presampled2")
+    parser.add_argument("--save_path", type=str, default="data/MIMeta_presampled")
     args = parser.parse_args()
     data_path = args.data_path
     save_path = args.save_path

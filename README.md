@@ -26,7 +26,7 @@ cross-domain learning, few-shot learning and meta-learning. It is therefore easy
 use the MIMeta dataset in conjunction with TorchCross to perform cross-domain learning,
 few-shot learning or meta-learning experiments.
 
-**This library is still in beta. The API is potentially subject to change. Any feedback
+**This library is still in alpha. The API is potentially subject to change. Any feedback
 is welcome.**
 
 ## Installation
@@ -76,7 +76,7 @@ of multiple MIMeta tasks.
 ### Examples
 
 See the [examples](examples) directory for examples on how to use MIMeta in conjunction
-with TorchCross.
+with [TorchCross](https://www.github.com/StefanoWoerner/torchcross).
 - [`imagenet_pretrained.py`](examples/imagenet_pretrained.py) shows how you can test
   pre-trained models on a few-shot instance of a MIMeta task.
 - [`cross_domain_pretraining.py`](examples/cross_domain_pretraining.py) shows how you
@@ -86,3 +86,5 @@ with TorchCross.
   cross-domain meta-learning with [MAML](https://arxiv.org/abs/1703.03400) on different
   MIMeta tasks and then test the meta-learned model on multiple few-shot instances of a
   MIMeta task.
+- [`fully_supervised.py`](examples/fully_supervised.py) shows how you can perform
+  fully-supervised learning on MIMeta tasks by using the TorchCross `SimpleClassifier`.

@@ -70,7 +70,7 @@ class MIMeta(TaskSource):
         self.task_target = TaskTarget[task_info["task_target"]]
         self.classes = task_info["labels"]
         self.task_identifier = f"{dataset_name}: {task_name}"
-        self.domain_identifier = ""  # task_info["domain"]
+        self.domain_identifier = info["domain"]
         self.input_size = info["input_size"]
         self.task_description = TaskDescription(
             self.task_target, self.classes, self.task_identifier, self.domain_identifier

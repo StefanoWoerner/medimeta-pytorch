@@ -142,7 +142,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--data_path", type=str, default="data/MIMeta")
     parser.add_argument(
-        "--presampled_data_path", type=str, default="data/MIMeta_presampled2"
+        "--presampled_data_path", type=str, default="data/MIMeta_presampled"
     )
     parser.add_argument("--target_dataset", type=str, default="OCT")
     parser.add_argument("--target_task", type=str, default="disease")
