@@ -14,6 +14,7 @@ class MultiMIMetaBatchTaskSource(RandomInterleaveDataset):
         shuffle: bool = True,
         drop_last: bool = False,
         collate_fn: Optional[Callable] = None,
+        splits: list[str] | str | None = None,
         original_splits: list[str] | str | None = None,
         transform: Optional[Callable] = None,
     ):
@@ -23,20 +24,30 @@ class MultiMIMetaBatchTaskSource(RandomInterleaveDataset):
             f"drop_last={drop_last}, collate_fn={collate_fn}, original_splits={original_splits}, "
             f"transform={transform}"
         )
+        if splits is None or isinstance(splits, str):
+            splits = [splits] * len(task_ids)
+        elif len(splits) == len(task_ids):
+            pass
+        else:
+            splits = [splits] * len(task_ids)
         if original_splits is None or isinstance(original_splits, str):
             original_splits = [original_splits] * len(task_ids)
+        elif len(original_splits) == len(task_ids):
+            pass
         else:
-            assert len(original_splits) == len(task_ids)
+            original_splits = [original_splits] * len(task_ids)
+
         unbatched_task_sources = [
             MIMeta(
                 data_path=mimeta_data_path,
-                dataset_name=dataset_name,
+                dataset_id=dataset_id,
                 task_name=task_name,
+                split=split,
                 original_split=original_split,
                 transform=transform,
             )
-            for (dataset_name, task_name), original_split in zip(
-                task_ids, original_splits
+            for (dataset_id, task_name), split, original_split in zip(
+                task_ids, splits, original_splits
             )
         ]
         batched_task_sources = [
