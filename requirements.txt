@@ -1,8 +1,7 @@
-h5py~=3.8.0
-numpy~=1.24.3
-torch~=2.0.0
-PyYAML~=6.0
-Pillow~=9.5.0
-torchvision~=0.15.1
-tqdm~=4.65.0
-torchcross~=0.0.4
+h5py>=3.8.0
+numpy>=1.24.3
+torch>=2.0.0
+PyYAML>=6.0
+Pillow>=9.5.0
+torchvision>=0.15.1
+torchcross>=0.0.6
