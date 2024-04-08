@@ -7,7 +7,7 @@ import torchvision.models as _models
 from torch.utils.data import DataLoader
 
 import torchcross as tx
-from mimeta import MIMeta, MultiMIMetaBatchTaskSource, get_available_tasks
+from medimeta import MedIMeta, MultiMedIMetaBatchTaskSource, get_available_tasks
 from torchcross.data.metadataset import FewShotMetaDataset
 from torchcross.data.task_source import SubsetTaskSource, BatchedTaskSource
 from torchcross.models.lightning import SimpleCrossDomainClassifier
@@ -24,7 +24,7 @@ def resnet18_backbone(pretrained=False):
 
 def main(args):
     data_path = args.data_path
-    target_dataset_name = args.target_dataset
+    target_dataset_id = args.target_dataset
     target_task_name = args.target_task
     num_workers = args.num_workers
 
@@ -35,11 +35,13 @@ def main(args):
         (ds, t)
         for ds, tasks in task_dict.items()
         for t in tasks
-        if ds != target_dataset_name
+        if ds != target_dataset_id
     ]
 
     # Get the validation splits for each task in the train-val set
-    train_val_info = [MIMeta.get_info_dict(data_path, ds) for ds, t in train_val_tasks]
+    train_val_info = [
+        MedIMeta.get_info_dict(data_path, ds) for ds, t in train_val_tasks
+    ]
     available_splits = [
         [k for k, v in info["original_splits_num_samples"].items() if v > 0]
         for info in train_val_info
@@ -47,14 +49,14 @@ def main(args):
     val_splits = [splits[-1] for splits in available_splits]
 
     # Create the cross-domain batch task sources
-    train_dataset = MultiMIMetaBatchTaskSource(
+    train_dataset = MultiMedIMetaBatchTaskSource(
         data_path,
         train_val_tasks,
         batch_size,
         collate_fn=tx.utils.collate_fn.stack,
         original_splits="train",
     )
-    val_dataset = MultiMIMetaBatchTaskSource(
+    val_dataset = MultiMedIMetaBatchTaskSource(
         data_path,
         train_val_tasks,
         batch_size,
@@ -95,7 +97,7 @@ def main(args):
         limit_val_batches=100,
     )
 
-    # Pre-train the model on all the tasks in MIMeta except the target task
+    # Pre-train the model on all the tasks in MedIMeta except the target task
     trainer.fit(model, train_dataloader, val_dataloader)
 
     # Save the model
@@ -103,7 +105,7 @@ def main(args):
     # torch.save(model.state_dict(), "model.pt")
 
     # Create one 10-shot task from the target dataset
-    target_task_source = MIMeta(data_path, target_dataset_name, target_task_name)
+    target_task_source = MedIMeta(data_path, target_dataset_id, target_task_name)
     target_few_shot = FewShotMetaDataset(
         target_task_source,
         collate_fn=None,
@@ -162,8 +164,8 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data_path", type=str, default="data/MIMeta")
-    parser.add_argument("--target_dataset", type=str, default="OCT")
+    parser.add_argument("--data_path", type=str, default="data/MedIMeta")
+    parser.add_argument("--target_dataset", type=str, default="oct")
     parser.add_argument("--target_task", type=str, default="disease")
     parser.add_argument("--num_workers", type=int, default=8)
 

@@ -2,13 +2,13 @@ from typing import Optional, Callable
 
 from torchcross.data import RandomInterleaveDataset, BatchedTaskSource
 from .logger import logger
-from .mimeta import MIMeta
+from .medimeta import MedIMeta
 
 
-class MultiMIMetaBatchTaskSource(RandomInterleaveDataset):
+class MultiMedIMetaBatchTaskSource(RandomInterleaveDataset):
     def __init__(
         self,
-        mimeta_data_path: str,
+        medimeta_data_path: str,
         task_ids: list[tuple[str, str]],
         batch_size: int,
         shuffle: bool = True,
@@ -19,7 +19,7 @@ class MultiMIMetaBatchTaskSource(RandomInterleaveDataset):
         transform: Optional[Callable] = None,
     ):
         logger.info(
-            f"Initializing MultiMIMetaBatchTaskSource with mimeta_data_path={mimeta_data_path}, "
+            f"Initializing MultiMedIMetaBatchTaskSource with medimeta_data_path={medimeta_data_path}, "
             f"task_ids={task_ids}, batch_size={batch_size}, shuffle={shuffle}, "
             f"drop_last={drop_last}, collate_fn={collate_fn}, original_splits={original_splits}, "
             f"transform={transform}"
@@ -38,8 +38,8 @@ class MultiMIMetaBatchTaskSource(RandomInterleaveDataset):
             original_splits = [original_splits] * len(task_ids)
 
         unbatched_task_sources = [
-            MIMeta(
-                data_path=mimeta_data_path,
+            MedIMeta(
+                data_path=medimeta_data_path,
                 dataset_id=dataset_id,
                 task_name=task_name,
                 split=split,

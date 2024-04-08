@@ -25,12 +25,12 @@ def default_transform(input_size):
     )
 
 
-class MIMeta(TaskSource):
-    """A PyTorch Dataset and TorchCross TaskSource for the MIMeta
+class MedIMeta(TaskSource):
+    """A PyTorch Dataset and TorchCross TaskSource for the MedIMeta
     dataset.
 
     Args:
-        data_path: The path to the MIMeta data directory containing the
+        data_path: The path to the MedIMeta data directory containing the
             dataset directories.
         dataset_id: The ID of the dataset to use.
         task_name: The name of the task to use.
@@ -72,7 +72,7 @@ class MIMeta(TaskSource):
         use_hdf5: bool = True,
     ):
         logger.info(
-            f"Initializing MIMeta with data_path={data_path}, dataset_id={dataset_id}, "
+            f"Initializing MedIMeta with data_path={data_path}, dataset_id={dataset_id}, "
             f"task_name={task_name}, original_split={original_split}, transform={transform}, "
             f"use_hdf5={use_hdf5}"
         )

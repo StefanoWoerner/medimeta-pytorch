@@ -6,7 +6,7 @@ import torch.nn as _nn
 import torchvision.models as _models
 from torch.utils.data import DataLoader
 
-from mimeta import MIMeta
+from medimeta import MedIMeta
 from torchcross.data import TaskDescription
 from torchcross.models.lightning import SimpleClassifier
 
@@ -21,23 +21,23 @@ def resnet18_backbone(pretrained=False):
 
 def main(args):
     data_path = args.data_path
-    target_dataset_name = args.target_dataset
+    target_dataset_id = args.target_dataset
     target_task_name = args.target_task
     num_workers = args.num_workers
 
     batch_size = 64
 
     # Create train and validation datasets for the target task
-    train_dataset = MIMeta(
-        data_path, target_dataset_name, target_task_name, original_split="train"
+    train_dataset = MedIMeta(
+        data_path, target_dataset_id, target_task_name, original_split="train"
     )
-    dataset_info = MIMeta.get_info_dict(data_path, target_dataset_name)
+    dataset_info = MedIMeta.get_info_dict(data_path, target_dataset_id)
     available_splits = [
         k for k, v in dataset_info["original_splits_num_samples"].items() if v > 0
     ]
     val_split_name = available_splits[-1]
-    val_dataset = MIMeta(
-        data_path, target_dataset_name, target_task_name, original_split=val_split_name
+    val_dataset = MedIMeta(
+        data_path, target_dataset_id, target_task_name, original_split=val_split_name
     )
 
     train_dataloader = DataLoader(
@@ -81,8 +81,8 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data_path", type=str, default="data/MIMeta")
-    parser.add_argument("--target_dataset", type=str, default="OCT")
+    parser.add_argument("--data_path", type=str, default="data/MedIMeta")
+    parser.add_argument("--target_dataset", type=str, default="oct")
     parser.add_argument("--target_task", type=str, default="disease")
     parser.add_argument("--num_workers", type=int, default=8)
 

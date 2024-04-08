@@ -1,7 +1,7 @@
 import os
 import pickle as pkl
 
-from mimeta import MIMeta
+from medimeta import MedIMeta
 from torchcross.data.metadataset import (
     FewShotMetaDataset,
     SubTaskRandomFewShotMetaDataset,
@@ -12,7 +12,7 @@ overwrite = False
 
 
 def available_tasks(data_path) -> list[tuple[str, str]]:
-    task_dict = MIMeta.get_available_tasks(data_path)
+    task_dict = MedIMeta.get_available_tasks(data_path)
     return [(dataset, task) for dataset, tasks in task_dict.items() for task in tasks]
 
 
@@ -25,7 +25,7 @@ def create_few_shot_tasks(
     length: int,
     split: str | list[str] | None = None,
 ) -> list[Task]:
-    task_source = MIMeta(data_path, dataset_id, task_name, split=split)
+    task_source = MedIMeta(data_path, dataset_id, task_name, split=split)
     few_shot = FewShotMetaDataset(
         task_source, None, n_support, n_query, length=length, output_indices=True
     )
@@ -51,7 +51,7 @@ def create_random_few_shot_tasks(
     length: int,
     split: str | list[str] | None = None,
 ) -> list[Task]:
-    task_source = MIMeta(data_path, dataset_id, task_name, split=split)
+    task_source = MedIMeta(data_path, dataset_id, task_name, split=split)
     few_shot = SubTaskRandomFewShotMetaDataset(
         task_source,
         None,
@@ -141,8 +141,8 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data_path", type=str, default="data/MIMeta")
-    parser.add_argument("--save_path", type=str, default="data/MIMeta_presampled")
+    parser.add_argument("--data_path", type=str, default="data/MedIMeta")
+    parser.add_argument("--save_path", type=str, default="data/MedIMeta_presampled2")
     parser.add_argument("--split", type=str, default=None)
     args = parser.parse_args()
     data_path = args.data_path

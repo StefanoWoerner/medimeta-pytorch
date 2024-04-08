@@ -6,14 +6,14 @@ from torchcross.data.metadataset import MetaDataset
 from torchcross.data.task import Task, TaskDescription
 from torchcross.utils.collate_fn import identity
 from .logger import logger
-from .mimeta import MIMeta
+from .medimeta import MedIMeta
 
 
-class PickledMIMetaTaskDataset(MetaDataset):
+class PickledMedIMetaTaskDataset(MetaDataset):
     def __init__(
         self,
         task_lists_data_path: str,
-        mimeta_data_path: str,
+        medimeta_data_path: str,
         dataset_id: str,
         task_name: str,
         n_support: int | tuple[int, int],
@@ -24,8 +24,8 @@ class PickledMIMetaTaskDataset(MetaDataset):
         transform: Optional[Callable] = None,
     ):
         logger.info(
-            f"Initializing PickledMIMetaTaskDataset with task_lists_data_path={task_lists_data_path}, "
-            f"mimeta_data_path={mimeta_data_path}, dataset_name={dataset_id}, task_name={task_name}, "
+            f"Initializing PickledMedIMetaTaskDataset with task_lists_data_path={task_lists_data_path}, "
+            f"medimeta_data_path={medimeta_data_path}, dataset_name={dataset_id}, task_name={task_name}, "
             f"n_support={n_support}, n_query={n_query}, length={length}, "
             f"collate_fn={collate_fn}, transform={transform}"
         )
@@ -45,8 +45,8 @@ class PickledMIMetaTaskDataset(MetaDataset):
             raise ValueError(f"Task list file {file_path} not found.")
         with open(file_path, "rb") as f:
             self.task_list: list[Task] = pkl.load(f)
-        self.task_source = MIMeta(
-            data_path=mimeta_data_path,
+        self.task_source = MedIMeta(
+            data_path=medimeta_data_path,
             dataset_id=dataset_id,
             task_name=task_name,
             split=split,
@@ -66,11 +66,11 @@ class PickledMIMetaTaskDataset(MetaDataset):
         return len(self.task_list)
 
 
-class MultiPickledMIMetaTaskDataset(MetaDataset):
+class MultiPickledMedIMetaTaskDataset(MetaDataset):
     def __init__(
         self,
         task_lists_data_path: str,
-        mimeta_data_path: str,
+        medimeta_data_path: str,
         task_ids: list[tuple[str, str]],
         n_support: int | tuple[int, int],
         n_query: int,
@@ -80,8 +80,8 @@ class MultiPickledMIMetaTaskDataset(MetaDataset):
         transform: Optional[Callable] = None,
     ):
         logger.info(
-            f"Initializing MultiPickledMIMetaTaskDataset with task_lists_data_path={task_lists_data_path}, "
-            f"mimeta_data_path={mimeta_data_path}, task_ids={task_ids}, "
+            f"Initializing MultiPickledMedIMetaTaskDataset with task_lists_data_path={task_lists_data_path}, "
+            f"medimeta_data_path={medimeta_data_path}, task_ids={task_ids}, "
             f"n_support={n_support}, n_query={n_query}, length={length}, split={split}, "
             f"collate_fn={collate_fn}, transform={transform}"
         )
@@ -104,8 +104,8 @@ class MultiPickledMIMetaTaskDataset(MetaDataset):
             with open(file_path, "rb") as f:
                 self.task_list.extend(zip(pkl.load(f), [i] * length))
         self.task_sources = [
-            MIMeta(
-                data_path=mimeta_data_path,
+            MedIMeta(
+                data_path=medimeta_data_path,
                 dataset_id=dataset_id,
                 task_name=task_name,
                 split=split,

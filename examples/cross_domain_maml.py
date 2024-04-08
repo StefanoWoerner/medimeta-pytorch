@@ -8,10 +8,10 @@ import torchvision.models as _models
 from torch.utils.data import DataLoader
 
 import torchcross as tx
-from mimeta import (
+from medimeta import (
     get_available_tasks,
-    MultiPickledMIMetaTaskDataset,
-    PickledMIMetaTaskDataset,
+    MultiPickledMedIMetaTaskDataset,
+    PickledMedIMetaTaskDataset,
 )
 from torchcross.models.lightning import CrossDomainMAML
 from torchcross.utils.collate_fn import identity
@@ -28,7 +28,7 @@ def resnet18_backbone(pretrained=False):
 def main(args):
     data_path = args.data_path
     presampled_data_path = args.presampled_data_path
-    target_dataset_name = args.target_dataset
+    target_dataset_id = args.target_dataset
     target_task_name = args.target_task
     validation_dataset_name = args.validation_dataset
     validation_task_name = args.validation_task
@@ -41,11 +41,11 @@ def main(args):
         (ds, t)
         for ds, tasks in task_dict.items()
         for t in tasks
-        if ds != target_dataset_name
+        if ds != target_dataset_id
     ]
 
     # Create the cross-domain meta-dataset from pre-sampled tasks
-    train_dataset = MultiPickledMIMetaTaskDataset(
+    train_dataset = MultiPickledMedIMetaTaskDataset(
         presampled_data_path,
         data_path,
         train_tasks,
@@ -54,7 +54,7 @@ def main(args):
         length=1000,
         collate_fn=tx.utils.collate_fn.stack,
     )
-    val_dataset = PickledMIMetaTaskDataset(
+    val_dataset = PickledMedIMetaTaskDataset(
         presampled_data_path,
         data_path,
         validation_dataset_name,
@@ -106,7 +106,7 @@ def main(args):
         limit_val_batches=100,
     )
 
-    # Pre-train the model on all the tasks in MIMeta except the target task
+    # Pre-train the model on all the tasks in MedIMeta except the target task
     trainer.fit(model, train_dataloader, val_dataloader)
 
     # Save the model
@@ -114,10 +114,10 @@ def main(args):
     # torch.save(model.state_dict(), "model.pt")
 
     # Create the test dataloader
-    test_dataset = PickledMIMetaTaskDataset(
+    test_dataset = PickledMedIMetaTaskDataset(
         presampled_data_path,
         data_path,
-        target_dataset_name,
+        target_dataset_id,
         target_task_name,
         n_support=5,
         n_query=10,
@@ -140,9 +140,9 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data_path", type=str, default="data/MIMeta")
+    parser.add_argument("--data_path", type=str, default="data/MedIMeta")
     parser.add_argument(
-        "--presampled_data_path", type=str, default="data/MIMeta_presampled"
+        "--presampled_data_path", type=str, default="data/MedIMeta_presampled"
     )
     parser.add_argument("--target_dataset", type=str, default="OCT")
     parser.add_argument("--target_task", type=str, default="disease")

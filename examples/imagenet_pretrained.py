@@ -7,7 +7,7 @@ import torchvision.models as _models
 from torch.utils.data import DataLoader
 
 import torchcross as tx
-from mimeta import MIMeta
+from medimeta import MedIMeta
 from torchcross.data.metadataset import FewShotMetaDataset
 from torchcross.data.task_source import SubsetTaskSource, BatchedTaskSource
 from torchcross.models.lightning import SimpleCrossDomainClassifier
@@ -24,7 +24,7 @@ def resnet18_backbone(pretrained=False):
 
 def main(args):
     data_path = args.data_path
-    target_dataset_name = args.target_dataset
+    target_dataset_id = args.target_dataset
     target_task_name = args.target_task
     num_workers = args.num_workers
 
@@ -41,7 +41,7 @@ def main(args):
     model = SimpleCrossDomainClassifier(resnet18_backbone(pretrained=True), optimizer)
 
     # Create one 10-shot task from the target dataset
-    target_task_source = MIMeta(data_path, target_dataset_name, target_task_name)
+    target_task_source = MedIMeta(data_path, target_dataset_id, target_task_name)
     target_few_shot = FewShotMetaDataset(
         target_task_source,
         collate_fn=None,
@@ -100,8 +100,8 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data_path", type=str, default="data/MIMeta")
-    parser.add_argument("--target_dataset", type=str, default="OCT")
+    parser.add_argument("--data_path", type=str, default="data/MedIMeta")
+    parser.add_argument("--target_dataset", type=str, default="oct")
     parser.add_argument("--target_task", type=str, default="disease")
     parser.add_argument("--num_workers", type=int, default=8)
 
