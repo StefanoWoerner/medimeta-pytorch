@@ -34,7 +34,7 @@ is welcome.**
 The toolbox can be installed via pip:
 
 ```bash
-pip install medimeta-pytorch
+pip install medimeta
 ```
 
 ## Basic Usage
