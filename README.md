@@ -2,19 +2,12 @@
 
 ## Medical Imaging Meta Dataset
 
-We release the MedIMeta Dataset, a novel meta dataset comprised of 17 publicly available
-datasets containing a total of 28 tasks. We additionally prepared a private set of tasks
-derived from different datasets which will be used for validation and final testing of
-the submissions. All datasets included in the MedIMeta dataset have been previously
-published under a creative commons licence. The dataset bears similarity to, and has
-partial overlap with, the Medical MNIST dataset. However, we go beyond Medical MNIST in
-the amount and diversity of tasks included in our dataset. Moreover, all images in
-MedIMeta are standardized to an image size of 224x224 pixels which allows a more
-clinically meaningful analysis of the images. The MedIMeta dataset and this library
-provide a resource for quickly benchmarking algorithms on a wide range of medical tasks.
+We introduce the Medical Imaging Meta-Dataset (MedIMeta), a novel multi-domain, multi-task meta-dataset designed to facilitate the development and standardised evaluation of ML models and cross-domain few-shot learning algorithms for medical image classification. MedIMeta contains 19 medical imaging datasets spanning 10 different domains and encompassing 54 distinct medical tasks, offering opportunities for both single-task and multi-task training. All tasks are standardised to the same format and readily usable in PyTorch or other ML frameworks. All datasets have been previously published with an open license that allows redistribution or we obtained an explicit permission to do so.
 
-You can see details about the MedIMeta dataset as well as download the dataset from
-[https://www.l2l-challenge.org/data.html](https://www.l2l-challenge.org/data.html).
+Each dataset within the MedIMeta dataset is standardized to a size of 224 × 224 pixels which matches image size commonly used in pre-trained models. Furthermore, the dataset comes with pre-made splits to ensure ease of use and standardized benchmarking.
+
+You can see details about the MedIMeta dataset as well as download the data from
+[Zenodo](https://zenodo.org/records/7884735).
 
 ## PyTorch Library
 
