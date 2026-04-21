@@ -145,6 +145,17 @@ class MedIMeta(TaskSource):
             self.labels = self.labels[self.split_indices]
             self.use_split_indices = True
 
+    def binary_to_multiclass(self):
+        if (
+            self.task_target != TaskTarget.BINARY_CLASSIFICATION
+            or self.task_description.task_target != TaskTarget.BINARY_CLASSIFICATION
+        ):
+            raise ValueError("Task target is not binary classification.")
+        if self.labels.ndim > 1:
+            self.labels = self.labels[:, 0]
+        self.task_target = TaskTarget.MULTICLASS_CLASSIFICATION
+        self.task_description.task_target = TaskTarget.MULTICLASS_CLASSIFICATION
+
     def get_split_indices(self, split: str | list[str], use_original_split=False):
         if isinstance(split, str):
             split = [split]

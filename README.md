@@ -40,7 +40,7 @@ from medimeta import MedIMeta
 
 # Create the dataset for the Disease task of the OCT dataset, assuming
 # the data is stored in the "data/MedIMeta" directory
-dataset = MedIMeta("data/MedIMeta", "oct", "Disease")
+dataset = MedIMeta("data/MedIMeta", "oct", "disease class")
 
 # Get the first sample
 sample = dataset[0]

@@ -4,9 +4,9 @@ build-backend = "hatchling.build"
 
 [project]
 name = "medimeta"
-version = "0.0.6"
+version = "0.0.7"
 authors = [
-    { name="Stefano Woerner", email="stefano@woerner.eu" },
+    { name = "Stefano Woerner", email = "stefano@woerner.eu" },
 ]
 description = "Library for using the MedIMeta dataset"
 readme = "README.md"
@@ -19,19 +19,21 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
     "Operating System :: OS Independent",
     "Topic :: Scientific/Engineering",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 dependencies = [
-    "h5py>=3.8.0",
-    "numpy>=1.24.3",
-    "torch>=2.0.0",
-    "PyYAML>=6.0",
-    "Pillow>=9.5.0",
-    "torchvision>=0.15.1",
-    "torchcross>=0.0.6",
+    "h5py>=3.12.1",
+    "numpy>=2.1.3",
+    "torch>=2.6.0",
+    "PyYAML>=6.0.2",
+    "Pillow>=11.1.0",
+    "torchvision>=0.21.0",
+    "torchcross>=0.0.7",
 ]
 
 [project.urls]
